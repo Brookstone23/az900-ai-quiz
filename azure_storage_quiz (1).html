@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Azure Storage Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 20px; }
+        .feedback { font-weight: bold; margin-top: 5px; }
+        .correct { color: green; }
+        .incorrect { color: red; }
+        #scoreboard { margin-top: 30px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h1>Azure Storage Quiz</h1>
+    <form id="quizForm">
+    </form>
+    <div id="scoreboard"></div>
+
+    <script>
+        const questions = [
+            {
+                q: "What type of storage is best for storing large amounts of unstructured data?",
+                options: ["Blob Storage", "Queue Storage", "File Storage", "Table Storage"],
+                answer: 0
+            },
+            {
+                q: "Which Azure Storage type is optimized for storing massive amounts of text or binary data?",
+                options: ["Queue Storage", "Blob Storage", "File Storage", "Disk Storage"],
+                answer: 1
+            },
+            {
+                q: "Which storage service is used for storing and retrieving messages?",
+                options: ["Blob Storage", "Queue Storage", "File Storage", "Table Storage"],
+                answer: 1
+            },
+            {
+                q: "Which Azure Storage type supports SMB protocol?",
+                options: ["Blob Storage", "Queue Storage", "File Storage", "Table Storage"],
+                answer: 2
+            },
+            {
+                q: "What is the maximum size of a single blob in Azure Blob Storage?",
+                options: ["100 GB", "1 TB", "4.75 TB", "8 TB"],
+                answer: 2
+            },
+            {
+                q: "Which feature allows you to recover deleted blobs?",
+                options: ["Soft delete", "Snapshot", "Versioning", "Replication"],
+                answer: 0
+            },
+            {
+                q: "Which Azure Storage service is best for storing structured NoSQL data?",
+                options: ["Blob Storage", "Queue Storage", "Table Storage", "File Storage"],
+                answer: 2
+            },
+            {
+                q: "What is the default replication strategy for Azure Storage accounts?",
+                options: ["LRS", "GRS", "ZRS", "RA-GRS"],
+                answer: 0
+            },
+            {
+                q: "Which replication option provides the highest availability?",
+                options: ["LRS", "ZRS", "GRS", "RA-GRS"],
+                answer: 3
+            },
+            {
+                q: "Which tool can be used to manage Azure Storage resources?",
+                options: ["Azure CLI", "Azure Portal", "Storage Explorer", "All of the above"],
+                answer: 3
+            },
+            {
+                q: "What is the maximum size of a message in Azure Queue Storage?",
+                options: ["64 KB", "128 KB", "256 KB", "512 KB"],
+                answer: 2
+            },
+            {
+                q: "Which feature allows you to take a read-only version of a blob?",
+                options: ["Snapshot", "Soft delete", "Versioning", "Replication"],
+                answer: 0
+            },
+            {
+                q: "Which Azure Storage type is best for lift-and-shift of legacy applications?",
+                options: ["Blob Storage", "Queue Storage", "File Storage", "Table Storage"],
+                answer: 2
+            },
+            {
+                q: "Which protocol is supported by Azure File Storage?",
+                options: ["FTP", "SMB", "HTTP", "NFS"],
+                answer: 1
+            },
+            {
+                q: "What is the maximum number of messages in a queue?",
+                options: ["1 million", "10 million", "Unlimited", "20 million"],
+                answer: 2
+            },
+            {
+                q: "Which storage tier is best for infrequently accessed data?",
+                options: ["Hot", "Cool", "Archive", "Premium"],
+                answer: 2
+            },
+            {
+                q: "Which Azure Storage feature helps in managing access to resources?",
+                options: ["RBAC", "IAM", "SAS", "All of the above"],
+                answer: 3
+            },
+            {
+                q: "Which of the following is a valid blob type?",
+                options: ["Block blob", "Page blob", "Append blob", "All of the above"],
+                answer: 3
+            },
+            {
+                q: "What is the maximum size of a file share in Azure File Storage?",
+                options: ["1 TB", "5 TB", "100 TB", "10 TB"],
+                answer: 2
+            },
+            {
+                q: "Which feature allows you to restrict access to storage resources based on IP?",
+                options: ["SAS", "Firewall rules", "RBAC", "Encryption"],
+                answer: 1
+            }
+        ];
+
+        const form = document.getElementById("quizForm");
+        let score = 0;
+
+        questions.forEach((item, index) => {
+            const div = document.createElement("div");
+            div.className = "question";
+            div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${item.q}</p>`;
+            item.options.forEach((opt, i) => {
+                const id = `q${index}_opt${i}`;
+                div.innerHTML += `
+                    <input type="radio" name="q${index}" id="${id}" value="${i}">
+                    <label for="${id}">${opt}</label><br>
+                `;
+            });
+            const feedback = document.createElement("div");
+            feedback.id = `feedback${index}`;
+            feedback.className = "feedback";
+            div.appendChild(feedback);
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = "Submit Answer";
+            button.onclick = () => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    const selectedIndex = parseInt(selected.value);
+                    if (selectedIndex === item.answer) {
+                        feedback.textContent = "Correct!";
+                        feedback.className = "feedback correct";
+                        score++;
+                    } else {
+                        feedback.textContent = `Incorrect. Correct answer: ${item.options[item.answer]}`;
+                        feedback.className = "feedback incorrect";
+                    }
+                    button.disabled = true;
+                } else {
+                    feedback.textContent = "Please select an answer.";
+                    feedback.className = "feedback incorrect";
+                }
+            };
+            div.appendChild(button);
+            form.appendChild(div);
+        });
+
+        const scoreboard = document.getElementById("scoreboard");
+        const finalButton = document.createElement("button");
+        finalButton.textContent = "Show Final Score";
+        finalButton.onclick = () => {
+            scoreboard.textContent = `Your final score is ${score} out of ${questions.length}.`;
+        };
+        document.body.appendChild(finalButton);
+    </script>
+</body>
+</html>
